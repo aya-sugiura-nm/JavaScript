@@ -9,10 +9,12 @@ window.onload = function(){
     if(familyName == ''){
       newErrorMessageElement = '名前(氏)は必須項目です';
       addErrorMessage(newErrorMessageElement);
-    }else if(!checkCharTypeZenkaku(familyName)){
+    }
+    if(!checkCharTypeZenkaku(familyName)){
       newErrorMessageElement = '名前(氏)は全角のみの入力です';
       addErrorMessage(newErrorMessageElement);
-    }else if(familyName.length > 50){
+    }
+    if(familyName.length > 50){
       newErrorMessageElement = '名前(氏)は全角50文字以内で入力してください';
       addErrorMessage(newErrorMessageElement);
     }
@@ -21,10 +23,12 @@ window.onload = function(){
     if(firstName == ''){
       newErrorMessageElement = '名前(名)は必須項目です';
       addErrorMessage(newErrorMessageElement);
-    }else if(!checkCharTypeZenkaku(firstName)){
+    }
+    if(!checkCharTypeZenkaku(firstName)){
       newErrorMessageElement = '名前(名)は全角のみの入力です';
       addErrorMessage(newErrorMessageElement);
-    }else if(firstName.length > 50){
+    }
+    if(firstName.length > 50){
       newErrorMessageElement = '名前(名)は全角50文字以内で入力してください';
       addErrorMessage(newErrorMessageElement);
     }
@@ -33,10 +37,12 @@ window.onload = function(){
     if(kanaFamilyName == ''){
       newErrorMessageElement = 'フリガナ(氏)は必須項目です';
       addErrorMessage(newErrorMessageElement);
-    }else if(!checkCharTypeZenkaku(kanaFamilyName)){
+    }
+    if(!checkCharTypeZenkaku(kanaFamilyName)){
       newErrorMessageElement = 'フリガナ(氏)は全角のみの入力です';
       addErrorMessage(newErrorMessageElement);
-    }else if(kanaFamilyName.length > 100){
+    }
+    if(kanaFamilyName.length > 100){
       newErrorMessageElement = 'フリガナ(氏)は全角100文字以内で入力してください';
       addErrorMessage(newErrorMessageElement);
     }
@@ -45,10 +51,12 @@ window.onload = function(){
     if(kanaFirstName == ''){
       newErrorMessageElement = 'フリガナ(名)は必須項目です';
       addErrorMessage(newErrorMessageElement);
-    }else if(!checkCharTypeZenkaku(kanaFirstName)){
+    }
+    if(!checkCharTypeZenkaku(kanaFirstName)){
       newErrorMessageElement = 'フリガナ(名)は全角のみの入力です';
       addErrorMessage(newErrorMessageElement);
-    }else if(kanaFirstName.length > 100){
+    }
+    if(kanaFirstName.length > 100){
       newErrorMessageElement = 'フリガナ(名)は全角100文字以内で入力してください';
       addErrorMessage(newErrorMessageElement);
     }
@@ -71,7 +79,6 @@ window.onload = function(){
       newErrorMessageElement = 'お問い合わせカテゴリを選択してください';
       addErrorMessage(newErrorMessageElement);
     }
-    if(category == 3)
 
     //郵便番号
     let postNumber = document.getElementById('frm').postNumber.value;
@@ -112,7 +119,7 @@ window.onload = function(){
   //半角数字ならTrueを返すメソッド
   function checkCharTypeNumeric(input){
     for(let i = 0; i < input.length; i++){
-      if(!input.charAt(i).match(/^[^\x01-\x7E\xA1-\xDF]+$/)){
+      if(!input.charAt(i).match(/^[0-9]+$/)){
         return false;
       }
     }
