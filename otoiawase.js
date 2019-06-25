@@ -1,9 +1,8 @@
 window.onload = function(){
   document.getElementById('btn').onclick = function(){
     //現在挿入されているリストを全て削除
-    while(document.getElementById('errorMessages').children.length > 0){
-      document.getElementById('errorMessages').removeChild(document.getElementById('errorMessages').children[0]);
-    }
+    deleteErrorMessages();
+
     //名前のバリデーション
     let familyName = document.getElementById('frm').familyName.value;
     if(familyName == ''){
@@ -114,30 +113,76 @@ window.onload = function(){
       addErrorMessage(newErrorMessageElement);
     }
   };
+};
 
-  //全て全角ならTrueを返すメソッド
-  function checkCharTypeZenkaku(input){
-    for(let i = 0; i < input.length; i++){
-      if(!input.charAt(i).match(/^[^\x01-\x7E\xA1-\xDF]+$/)){
-        return false;
-      }
-    }
-    return true
+//名前　動的チェック
+function nameCheck($this){
+  deleteErrorMessages();
+  alertLength($this, 50);
+  alertCharTypeZenkaku($this);
+}
+
+//メール　動的チェック
+function alertMail($this){
+  deleteErrorMessages();
+  if(!$this.value.match(/.+@.+\..+/)){
+    newErrorMessageElement = 'メールアドレスの形式が不適切です。';
+    addErrorMessage(newErrorMessageElement);
   }
-  //半角数字ならTrueを返すメソッド
-  function checkCharTypeNumeric(input){
-    for(let i = 0; i < input.length; i++){
-      if(!input.charAt(i).match(/^[0-9]+$/)){
-        return false;
-      }
-    }
-    return true
-  }
-  //指定した文字をエラーメッセージとして追加するメソッド
-  function addErrorMessage(message){
-    let errorMessages = document.getElementsByTagName('ul');
-    let newErrorMessageElement = document.createElement('li');
-    newErrorMessageElement.innerHTML = message;
-    errorMessages[0].appendChild(newErrorMessageElement);
+}
+
+//お問い合わせ内容　動的チェック
+function alertContent($this){
+  deleteErrorMessages();
+  alertLength($this, 1000);
+}
+
+function alertLength($this ,length){
+  if($this.value.length > length ){
+    let newErrorMessage = length + '文字以内で入力してください';
+    addErrorMessage(newErrorMessage);
   }
 };
+
+function alertCharTypeZenkaku($this){
+  for(let i = 0; i < $this.value.length; i++){
+    if(!$this.value.charAt(i).match(/^[^\x01-\x7E\xA1-\xDF]+$/)){
+      let newErrorMessage = '全角で入力してください';
+      addErrorMessage(newErrorMessage);
+      break;
+    }
+  }
+};
+
+//全て全角ならTrueを返すメソッド
+function checkCharTypeZenkaku(input){
+  for(let i = 0; i < input.length; i++){
+    if(!input.charAt(i).match(/^[^\x01-\x7E\xA1-\xDF]+$/)){
+      return false;
+    }
+  }
+  return true
+};
+//半角数字ならTrueを返すメソッド
+function checkCharTypeNumeric(input){
+  for(let i = 0; i < input.length; i++){
+    if(!input.charAt(i).match(/^[0-9]+$/)){
+      return false;
+    }
+  }
+  return true
+};
+//指定した文字をエラーメッセージとして追加するメソッド
+function addErrorMessage(message){
+  let errorMessages = document.getElementsByTagName('ul');
+  let newErrorMessageElement = document.createElement('li');
+  newErrorMessageElement.innerHTML = message;
+  errorMessages[0].appendChild(newErrorMessageElement);
+};
+
+//エラーメッセージを削除する
+function deleteErrorMessages(){
+  while(document.getElementById('errorMessages').children.length > 0){
+    document.getElementById('errorMessages').removeChild(document.getElementById('errorMessages').children[0]);
+  }
+}

@@ -19,11 +19,11 @@
     </ul>
     <form id="frm" action="" method="post">
       <p>
-        <label>名前　　　　氏：<input type="text" name="familyName"> 名：<input type="text" name="firstName"></label> <br>
-        <label>名前(カナ)　氏：<input type="text" name="kanaFamilyName"> 名：<input type="text" name="kanaFirstName"></label>
+        <label>名前　　　　氏：<input type="text" name="familyName" onInput="nameCheck(this)" /> 名：<input type="text" name="firstName" onInput="nameCheck(this)"/></label> <br>
+        <label>名前(カナ)　氏：<input type="text" name="kanaFamilyName" onInput="nameCheck(this)"/> 名：<input type="text" name="kanaFirstName" onInput="nameCheck(this)"/></label>
       </p>
       <p>
-        <label>メールアドレス：<input type="text" name="mail" value=""></label>
+        <label>メールアドレス：<input type="text" name="mail" value="" onInput="alertMail(this)"></label>
       </p>
       <p>お問い合わせカテゴリ
         <select name="category">
