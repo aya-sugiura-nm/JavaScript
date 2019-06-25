@@ -79,6 +79,14 @@ window.onload = function(){
       newErrorMessageElement = 'お問い合わせカテゴリを選択してください';
       addErrorMessage(newErrorMessageElement);
     }
+    if(category == 3){
+      if(document.getElementById('frm').address.value == ''){
+        window.alert("採用についてが選択されました。住所を入力してください");
+        document.getElementById('address').style.visibility = 'visible'
+        newErrorMessageElement = '住所は必須項目です';
+        addErrorMessage(newErrorMessageElement);
+      }
+    }
 
     //郵便番号
     let postNumber = document.getElementById('frm').postNumber.value;
