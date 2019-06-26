@@ -205,7 +205,7 @@ $(function () {
                     //処理が成功したとき
                     //該当する住所を表示
                     let address = response.results[0].address1 + response.results[0].address2;
-	                  // 結果が１つの場合は、町域名まで含める
+	                  // 結果が１つの場合は、町域名まで含める(町域名が2つあるパターンがある)
 	                  if(response.results.length == 1) {
 		                    address += response.results[0].address3;
 	                  }
@@ -216,6 +216,8 @@ $(function () {
                     addErrorMessageWithId(newErrorMessage, 'zipcodeMessage')
 
                 }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
             }
         });
     });
