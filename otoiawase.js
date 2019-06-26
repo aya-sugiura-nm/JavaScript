@@ -183,40 +183,40 @@ function deleteErrorMessages(id){
 }
 
 
-function searchAddressByZipcloud() {
-	// 検索中であることを表示
-	document.getElementById('address').value = '検索中...';
-	// 郵便番号の取得
-	var zipcode = document.getElementById('zipcode').value;
-	// zipcloudAPIの呼び出し
-	var element = document.createElement('script');
-	element.type = 'text/javascript';
-	element.charset = 'utf-8';
-	element.src = 'http://zipcloud.ibsnet.co.jp/api/search?zipcode='+zipcode+'&callback=writeAddressByZipcloud';
-	document.body.appendChild(element);
-};
-function writeAddressByZipcloud(response) {
-  deleteErrorMessages('zipcodeMessage')
-	// 検索中の表示を消去
-	var element = document.getElementById('address');
-	element.value = '';
-	// エラー発生時は、アラートを出して終了
-	if(response.status != 200) {
-    newErrorMessage = '住所検索に失敗しました。';
-    addErrorMessageWithId(newErrorMessage, 'zipcodeMessage')
-		return false;
-	}
-	// 検索結果がなかった場合も、アラートを出して終了
-	if(!response.results) {
-    newErrorMessage = '住所検索に失敗しました。';
-    addErrorMessageWithId(newErrorMessage, 'zipcodeMessage')
-    return false;
-	}
-	// 住所文字列の作成
-	var address = response.results[0].address1 + response.results[0].address2;
-	// 結果が１つの場合は、町域名まで含める
-	if(response.results.length == 1) {
-		address += response.results[0].address3;
-	}
-	element.value = address;
-};
+$(function () {
+    //検索ボタンをクリックされたときに実行
+    $("#zipcodeButton").click(function () {
+        //住所を削除、エラーメッセージも削除
+        document.getElementById('address').value = '';
+        deleteErrorMessages('zipcodeMessage');
+        //入力値をセット
+        var param = {zipcode: $('#zipcode').val()}
+        //zipcloudのAPIのURL
+        var send_url = "http://zipcloud.ibsnet.co.jp/api/search";
+        $.ajax({
+            type: "GET",
+            cache: false,
+            data: param,
+            url: send_url,
+            dataType: "jsonp",
+            success: function (response) {
+                //結果によって処理を振り分ける
+                if (response.status == 200 && response.results != null) {
+                    //処理が成功したとき
+                    //該当する住所を表示
+                    let address = response.results[0].address1 + response.results[0].address2;
+	                  // 結果が１つの場合は、町域名まで含める
+	                  if(response.results.length == 1) {
+		                    address += response.results[0].address3;
+	                  }
+                    document.getElementById('address').value = address;
+                } else {
+                    //エラーだった時
+                    newErrorMessage = '住所検索に失敗しました。';
+                    addErrorMessageWithId(newErrorMessage, 'zipcodeMessage')
+
+                }
+            }
+        });
+    });
+});
