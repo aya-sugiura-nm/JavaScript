@@ -19,14 +19,14 @@
     </ul>
     <form id="frm" action="" method="post">
       <p>
-        <label>名前　　　　氏：<input type="text" name="familyName" onInput="nameCheck(this)" /> 名：<input type="text" name="firstName" onInput="nameCheck(this)"/></label> <br>
-        <label>名前(カナ)　氏：<input type="text" name="kanaFamilyName" onInput="nameCheck(this)"/> 名：<input type="text" name="kanaFirstName" onInput="nameCheck(this)"/></label>
+        <label>名前　　　　氏：<input type="text" name="familyName" onInput="familyNameCheck(this)" /> 名：<input type="text" name="firstName" onInput="firstNameCheck(this)"/></label> <br>
+        <label>名前(カナ)　氏：<input type="text" name="kanaFamilyName" onInput="kanaFamilyNameCheck(this)"/> 名：<input type="text" name="kanaFirstName" onInput="kanaFirstNameCheck(this)"/></label>
       </p>
       <p>
         <label>メールアドレス：<input type="text" name="mail" value="" onInput="alertMail(this)"></label>
       </p>
       <p>お問い合わせカテゴリ
-        <select name="category">
+        <select name="category" onInput="alertCategory(this)">
           <option value=""> - </option>
           <option value="1">システムの使用方法について</option>
           <option value="2">システムの不具合について</option>
@@ -34,12 +34,12 @@
         </select>
       </p>
       <p id="address">
-        <label>郵便番号：<input type="text" name="postNumber"></label> <input type="button" name="" value="住所検索" id="postNumberBtn"> <br>
-        <label>住所：<input type="text" name="address"></label>
+        <label>郵便番号：<input type="text" name="postNumber" onInput="alertPostNumber(this)"></label> <input type="button" name="" value="住所検索" id="postNumberBtn"> <br>
+        <label>住所：<input type="text" name="address" onInput="alertAddress(this)"></label>
       </p>
       <p>
         <label>お問い合わせ内容 <br>
-          <textarea name="content" rows="10" cols="50"></textarea>
+          <textarea name="content" rows="10" cols="50" onInput="alertContent(this)"></textarea>
         </label>
       </p>
       <p>

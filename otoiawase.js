@@ -1,7 +1,7 @@
 window.onload = function(){
   document.getElementById('btn').onclick = function(){
     //現在挿入されているリストを全て削除
-    deleteErrorMessages();
+    deleteAllErrorMessages();
 
     //名前のバリデーション
     let familyName = document.getElementById('frm').familyName.value;
@@ -113,76 +113,211 @@ window.onload = function(){
       addErrorMessage(newErrorMessageElement);
     }
   };
+  //全て全角ならTrueを返すメソッド
+  function checkCharTypeZenkaku(input){
+    for(let i = 0; i < input.length; i++){
+      if(!input.charAt(i).match(/^[^\x01-\x7E\xA1-\xDF]+$/)){
+        return false;
+      }
+    }
+    return true
+  };
+  //半角数字ならTrueを返すメソッド
+  function checkCharTypeNumeric(input){
+    for(let i = 0; i < input.length; i++){
+      if(!input.charAt(i).match(/^[0-9]+$/)){
+        return false;
+      }
+    }
+    return true
+  };
+  //エラーメッセージを全て削除する
+  function deleteAllErrorMessages(){
+    while(document.getElementById('errorMessages').children.length > 0){
+      document.getElementById('errorMessages').removeChild(document.getElementById('errorMessages').children[0]);
+    }
+  };
+  //指定した文字をエラーメッセージとして追加するメソッド
+  function addErrorMessage(message){
+    let errorMessages = document.getElementsByTagName('ul');
+    let newErrorMessageElement = document.createElement('li');
+    newErrorMessageElement.innerHTML = message;
+    errorMessages[0].appendChild(newErrorMessageElement);
+  };
 };
 
 //名前　動的チェック
-function nameCheck($this){
-  deleteErrorMessages();
-  alertLength($this, 50);
-  alertCharTypeZenkaku($this);
+function familyNameCheck($this){
+  deleteErrorMessages('familyNameMessage');
+  if($this.value == ''){
+    let newErrorMessage = '名前(氏)は必須項目です'
+    addErrorMessageWithId(newErrorMessage, 'familyNameMessage')
+  }else{
+    if(alertLength($this, 50) != null){
+      let newErrorMessage = '名前(氏)は' + alertLength($this, 50);
+      addErrorMessageWithId(newErrorMessage, 'familyNameMessage')
+    }
+    if(alertCharTypeZenkaku($this) != null){
+      let newErrorMessage = '名前(氏)は' + alertCharTypeZenkaku($this);
+      addErrorMessageWithId(newErrorMessage, 'familyNameMessage');
+    }
+  }
 }
-
+function firstNameCheck($this){
+  deleteErrorMessages('firstNameMessage');
+  if($this.value == ''){
+    let newErrorMessage = '名前(名)は必須項目です'
+    addErrorMessageWithId(newErrorMessage, 'firstNameMessage')
+  }else{
+    if(alertLength($this, 50) != null){
+      let newErrorMessage = '名前(名)は' + alertLength($this, 50);
+      addErrorMessageWithId(newErrorMessage, 'firstNameMessage')
+    }
+    if(alertCharTypeZenkaku($this) != null){
+      let newErrorMessage = '名前(名)は' + alertCharTypeZenkaku($this);
+      addErrorMessageWithId(newErrorMessage, 'firstNameMessage');
+    }
+  }
+}
+function kanaFamilyNameCheck($this){
+  deleteErrorMessages('kanaFamilyNameMessage');
+  if($this.value == ''){
+    let newErrorMessage = 'フリガナ(氏)は必須項目です'
+    addErrorMessageWithId(newErrorMessage, 'kanaFamilyNameMessage')
+  }else{
+    if(alertLength($this, 50) != null){
+      let newErrorMessage = 'フリガナ(氏)は' + alertLength($this, 50);
+      addErrorMessageWithId(newErrorMessage, 'kanaFamilyNameMessage')
+    }
+    if(alertCharTypeZenkaku($this) != null){
+      let newErrorMessage = 'フリガナ(氏)は' + alertCharTypeZenkaku($this);
+      addErrorMessageWithId(newErrorMessage, 'kanaFamilyNameMessage');
+    }
+  }
+}
+function kanaFirstNameCheck($this){
+  deleteErrorMessages('kanaFirstNameMessage');
+  if($this.value == ''){
+    let newErrorMessage = 'フリガナ(名)は必須項目です'
+    addErrorMessageWithId(newErrorMessage, 'kanaFirstNameMessage')
+  }else{
+    if(alertLength($this, 50) != null){
+      let newErrorMessage = 'フリガナ(名)は' + alertLength($this, 50);
+      addErrorMessageWithId(newErrorMessage, 'kanaFirstNameMessage')
+    }
+    if(alertCharTypeZenkaku($this) != null){
+      let newErrorMessage = 'フリガナ(名)は' + alertCharTypeZenkaku($this);
+      addErrorMessageWithId(newErrorMessage, 'kanaFirstNameMessage');
+    }
+  }
+}
 //メール　動的チェック
 function alertMail($this){
-  deleteErrorMessages();
+  deleteErrorMessages('mailMessage');
   if(!$this.value.match(/.+@.+\..+/)){
-    newErrorMessageElement = 'メールアドレスの形式が不適切です。';
-    addErrorMessage(newErrorMessageElement);
+    if($this.value == ''){
+      newErrorMessage = 'メールアドレスを入力してください。';
+    }else{
+      newErrorMessage = 'メールアドレスの形式が不適切です。';
+    }
+    addErrorMessageWithId(newErrorMessage, 'mailMessage');
+  }
+}
+//お問い合わせカテゴリ　動的チェック
+function alertCategory($this){
+  deleteErrorMessages('categoryMessage');
+  if($this.value == ''){
+    newErrorMessage = 'お問い合わせカテゴリを選択してください';
+    addErrorMessageWithId(newErrorMessage, 'categoryMessage');
+  }
+  if($this.value == 3){
+    window.alert("採用についてが選択されました。住所を入力してください");
+    document.getElementById('address').style.visibility = 'visible'
+  }else{
+    document.getElementById('address').style.visibility = 'hidden'
+    deleteErrorMessages('postNumberMessage');
+    deleteErrorMessages('addressMessage');
+  }
+}
+//郵便番号　動的チェック
+function alertPostNumber($this){
+  deleteErrorMessages('postNumberMessage');
+  if($this.value == ''){
+    newErrorMessage = '郵便番号は必須項目です';
+    addErrorMessageWithId(newErrorMessage, 'postNumberMessage');
+  }else{
+    if(alertNumber($this) != null){
+      newErrorMessage = '郵便番号は' + alertNumber($this);
+      addErrorMessageWithId(newErrorMessage, 'postNumberMessage');
+    }else if($this.value.length != 7){
+      newErrorMessage = '郵便番号は半角数字7桁で入力してください';
+      addErrorMessageWithId(newErrorMessage, 'postNumberMessage');
+    }
+  }
+}
+//住所　動的チェック
+function alertAddress($this){
+  deleteErrorMessages('addressMessage');
+  if($this.value == ''){
+    let newErrorMessage = '住所は必須項目です';
+    addErrorMessageWithId(newErrorMessage, 'addressMessage');
+  }else if(alertLength($this, 100) != null){
+    let newErrorMessage = '住所は' + alertLength($this, 100);
+    addErrorMessageWithId(newErrorMessage, 'addressMessage')
   }
 }
 
 //お問い合わせ内容　動的チェック
 function alertContent($this){
-  deleteErrorMessages();
-  alertLength($this, 1000);
+  deleteErrorMessages('contentMessage');
+  if(alertLength($this, 1000) != null){
+    let newErrorMessage = 'お問い合わせ内容は' + alertLength($this, 1000);
+    addErrorMessageWithId(newErrorMessage, 'contentMessage')
+  }else if($this.value == ''){
+    newErrorMessage = 'お問い合わせ内容は必須項目です';
+    addErrorMessageWithId(newErrorMessage, 'contentMessage')
+  }
 }
 
+//エラーメッセージを返すメソッド
+//文字数チェック
 function alertLength($this ,length){
   if($this.value.length > length ){
-    let newErrorMessage = length + '文字以内で入力してください';
-    addErrorMessage(newErrorMessage);
+    return length + '文字以内で入力してください';
   }
+  return null;
 };
-
+//全角チェック
 function alertCharTypeZenkaku($this){
   for(let i = 0; i < $this.value.length; i++){
     if(!$this.value.charAt(i).match(/^[^\x01-\x7E\xA1-\xDF]+$/)){
-      let newErrorMessage = '全角で入力してください';
-      addErrorMessage(newErrorMessage);
-      break;
+      return '全角で入力してください';
     }
   }
+  return null;
 };
+//数字チェック
+function alertNumber($this){
+  for(let i = 0; i < $this.value.length; i++){
+    if(!$this.value.charAt(i).match(/^[0-9]+$/)){
+      return '半角数字で入力してください';
+    }
+  }
+  return null;
+}
 
-//全て全角ならTrueを返すメソッド
-function checkCharTypeZenkaku(input){
-  for(let i = 0; i < input.length; i++){
-    if(!input.charAt(i).match(/^[^\x01-\x7E\xA1-\xDF]+$/)){
-      return false;
-    }
-  }
-  return true
-};
-//半角数字ならTrueを返すメソッド
-function checkCharTypeNumeric(input){
-  for(let i = 0; i < input.length; i++){
-    if(!input.charAt(i).match(/^[0-9]+$/)){
-      return false;
-    }
-  }
-  return true
-};
-//指定した文字をエラーメッセージとして追加するメソッド
-function addErrorMessage(message){
+//指定した文字をエラーメッセージとして追加するメソッド(id指定あり)
+function addErrorMessageWithId(message, id){
   let errorMessages = document.getElementsByTagName('ul');
   let newErrorMessageElement = document.createElement('li');
+  newErrorMessageElement.setAttribute("id", id);
   newErrorMessageElement.innerHTML = message;
   errorMessages[0].appendChild(newErrorMessageElement);
-};
+}
 
-//エラーメッセージを削除する
-function deleteErrorMessages(){
-  while(document.getElementById('errorMessages').children.length > 0){
-    document.getElementById('errorMessages').removeChild(document.getElementById('errorMessages').children[0]);
+//エラーメッセージを削除する(id指定)
+function deleteErrorMessages(id){
+  if(document.getElementById(id)){
+    document.getElementById('errorMessages').removeChild(document.getElementById(id));
   }
 }
