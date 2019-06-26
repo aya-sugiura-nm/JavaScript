@@ -8,9 +8,6 @@
       #errorMessages li{
         color: red;
       }
-      #frm #address{
-        visibility: hidden;
-      }
     </style>
   </head>
   <body>
@@ -33,9 +30,9 @@
           <option value="3">採用について</option>
         </select>
       </p>
-      <p id="address">
-        <label>郵便番号：<input type="text" name="postNumber" onInput="alertPostNumber(this)"></label> <input type="button" name="" value="住所検索" id="postNumberBtn"> <br>
-        <label>住所：<input type="text" name="address" onInput="alertAddress(this)"></label>
+      <p>
+        <label>郵便番号：<input id="zipcode" type="text" name="postNumber" onInput="alertPostNumber(this)"></label> <input type="button" name="" value="住所検索" onclick="searchAddressByZipcloud()"> <br>
+        <label>住所：<input id="address" type="text" name="address" onInput="alertAddress(this)"></label>
       </p>
       <p>
         <label>お問い合わせ内容 <br>

@@ -92,18 +92,11 @@ function alertCategory($this){
     newErrorMessage = 'お問い合わせカテゴリを選択してください';
     addErrorMessageWithId(newErrorMessage, 'categoryMessage');
   }
-  if($this.value == 3){
-    window.alert("採用についてが選択されました。住所を入力してください");
-    document.getElementById('address').style.visibility = 'visible'
-  }else{
-    document.getElementById('address').style.visibility = 'hidden'
-    deleteErrorMessages('postNumberMessage');
-    deleteErrorMessages('addressMessage');
-  }
 }
 //郵便番号　動的チェック
 function alertPostNumber($this){
   deleteErrorMessages('postNumberMessage');
+  deleteErrorMessages('zipcodeMessage')
   if($this.value == ''){
     newErrorMessage = '郵便番号は必須項目です';
     addErrorMessageWithId(newErrorMessage, 'postNumberMessage');
@@ -188,3 +181,42 @@ function deleteErrorMessages(id){
     document.getElementById('errorMessages').removeChild(document.getElementById(id));
   }
 }
+
+
+function searchAddressByZipcloud() {
+	// 検索中であることを表示
+	document.getElementById('address').value = '検索中...';
+	// 郵便番号の取得
+	var zipcode = document.getElementById('zipcode').value;
+	// zipcloudAPIの呼び出し
+	var element = document.createElement('script');
+	element.type = 'text/javascript';
+	element.charset = 'utf-8';
+	element.src = 'http://zipcloud.ibsnet.co.jp/api/search?zipcode='+zipcode+'&callback=writeAddressByZipcloud';
+	document.body.appendChild(element);
+};
+function writeAddressByZipcloud(response) {
+  deleteErrorMessages('zipcodeMessage')
+	// 検索中の表示を消去
+	var element = document.getElementById('address');
+	element.value = '';
+	// エラー発生時は、アラートを出して終了
+	if(response.status != 200) {
+    newErrorMessage = '住所検索に失敗しました。';
+    addErrorMessageWithId(newErrorMessage, 'zipcodeMessage')
+		return false;
+	}
+	// 検索結果がなかった場合も、アラートを出して終了
+	if(!response.results) {
+    newErrorMessage = '住所検索に失敗しました。';
+    addErrorMessageWithId(newErrorMessage, 'zipcodeMessage')
+    return false;
+	}
+	// 住所文字列の作成
+	var address = response.results[0].address1 + response.results[0].address2;
+	// 結果が１つの場合は、町域名まで含める
+	if(response.results.length == 1) {
+		address += response.results[0].address3;
+	}
+	element.value = address;
+};
